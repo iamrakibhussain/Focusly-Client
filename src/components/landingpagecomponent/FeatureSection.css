@@ -111,7 +111,7 @@
 
 @media (max-width: 640px) {
   .feature-section__inner {
-    width: min(76rem, calc(100% - 1.25rem));
+    width: min(76rem, calc(100% - 4rem));
   }
 
   .feature-grid {

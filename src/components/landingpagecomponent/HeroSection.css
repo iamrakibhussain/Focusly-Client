@@ -169,7 +169,7 @@
   font-size: 1.1rem;
   font-weight: 700;
 }
-
+ 
 .dashboard-preview__chip {
   padding: 0.45rem 0.75rem;
   border-radius: 999px;
@@ -314,7 +314,7 @@
 
 @media (max-width: 640px) {
   .landing-shell {
-    width: min(76rem, calc(100% - 1.25rem));
+    width: min(76rem, calc(100% - 3rem));
     padding: 1.25rem 0 2.5rem;
   }
 
@@ -328,7 +328,7 @@
   }
 
   .hero-button {
-    width: 100%;
+    width: 40%;
   }
 
   .dashboard-preview__stats {

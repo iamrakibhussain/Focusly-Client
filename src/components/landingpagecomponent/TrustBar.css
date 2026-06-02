@@ -59,10 +59,11 @@
 
 @media (max-width: 640px) {
   .trust-bar__inner {
-    width: min(76rem, calc(100% - 1.25rem));
+    width: min(76rem, calc(100% - 3rem));
   }
 
   .trust-bar__stats {
     grid-template-columns: 1fr;
   }
 }
+ 
