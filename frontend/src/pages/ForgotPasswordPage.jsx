@@ -10,17 +10,21 @@ export default function ForgotPasswordPage() {
         </div>
 
         <form className="grid gap-4">
-          <label className="grid gap-2 text-sm">
-            <span className="text-text-secondary">Email</span>
-            <input
-              type="email"
-              placeholder="you@example.com"
-              className="rounded-control border border-white/10 bg-background px-4 py-3 outline-none transition placeholder:text-text-secondary focus:border-primary"
-            />
-          </label>
-
+          <label
+            htmlFor="email"
+            className="text-text-secondary"
+          >Email</label>
+          <input
+            type="email"
+            id="email"
+            placeholder="you@example.com"
+            name="email"
+            required
+            autoComplete="email"
+            className="rounded-control border border-white/10 bg-background px-4 py-3 outline-none transition placeholder:text-text-secondary focus:border-primary"
+          />
           <button
-            type="button"
+            type="submit"
             className="rounded-control bg-primary px-4 py-3 font-medium text-white shadow-glow transition hover:opacity-95"
           >
             Send reset link
