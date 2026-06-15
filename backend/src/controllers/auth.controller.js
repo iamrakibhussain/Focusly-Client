@@ -1,6 +1,6 @@
-import registerUserService from "../services/auth.service.js";
+import { registerUserService, loginUserService } from "../services/auth.service.js";
 
-export default async function registerUser(req, res) {
+export async function registerUser(req, res) {
   const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
@@ -24,4 +24,31 @@ export default async function registerUser(req, res) {
       message: error.message || "Internal server error",
     });
   }
+}
+
+export async function loginUser(req, res) {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({
+      success: false,
+      message: "Provide email & password!"
+    })
+  }
+
+  try {
+    const loggedInUser = await loginUserService({ email, password })
+    return res.status(200).json({
+      success: true,
+      message: "User login successfully!",
+      loggedInUser
+    })
+  }
+  catch (error) {
+    return res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.message
+    })
+  }
+
 }

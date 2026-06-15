@@ -7,6 +7,8 @@ export default function RegisterPage() {
 
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -28,6 +30,7 @@ export default function RegisterPage() {
     event.preventDefault();
     setMessage("");
     setIsError(false);
+    setIsLoading(true)
 
     try {
       const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
@@ -57,6 +60,9 @@ export default function RegisterPage() {
     } catch (err) {
       setMessage(err.message)
       setIsError(true)
+    }
+    finally {
+      setIsLoading(false)
     }
   };
 
@@ -127,7 +133,7 @@ export default function RegisterPage() {
             type="submit"
             className="rounded-control bg-primary px-4 py-3 font-medium text-white shadow-glow transition hover:opacity-95"
           >
-            Create account
+            {isLoading ? "Loading" : "Create account"}
           </button>
         </form>
 

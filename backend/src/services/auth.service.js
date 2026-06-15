@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import prisma from "../lib/prisma.js";
 
-export default async function registerUserService({ name, email, password }) {
+export async function registerUserService({ name, email, password }) {
   const normalizedName = name.trim();
   const normalizedEmail = email.trim().toLowerCase();
 
@@ -30,4 +30,35 @@ export default async function registerUserService({ name, email, password }) {
     name: user.name,
     email: user.email,
   };
+}
+
+export async function loginUserService({ email, password }) {
+  const normalizedEmail = email.trim().toLowerCase()
+  const user = await prisma.user.findUnique({
+    where: {
+      email: normalizedEmail
+    }
+  })
+
+  if (!user) {
+    const error = new Error("Invalid email or password");
+    error.statusCode = 401;
+    throw error;
+  }
+
+  const isPasswordValid = await bcrypt.compare(
+    password,
+    user.password
+  )
+
+  if (!isPasswordValid) {
+    const error = new Error("Invalid email or password");
+    error.statusCode = 401;
+    throw error;
+  }
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email
+  }
 }
