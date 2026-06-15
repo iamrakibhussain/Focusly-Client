@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
 
 export default function RegisterPage() {
+
+  const [message, setMessage] = useState("");
+  const [isError, setIsError] = useState(false)
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -20,8 +23,11 @@ export default function RegisterPage() {
     console.log(formData)
   };
 
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setMessage("");
+    setIsError(false);
 
     try {
       const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
@@ -35,8 +41,13 @@ export default function RegisterPage() {
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result?.message || "Registration failed");
+        setMessage(result.message)
+        setIsError(true)
+        return;
       }
+
+      setMessage(result.message)
+      setIsError(false)
 
       setFormData({
         name: "",
@@ -44,7 +55,8 @@ export default function RegisterPage() {
         password: "",
       });
     } catch (err) {
-      console.error(err);
+      setMessage(err.message)
+      setIsError(true)
     }
   };
 
@@ -55,6 +67,16 @@ export default function RegisterPage() {
           <p className="text-sm text-text-secondary">Create your account</p>
           <h1 className="mt-1 text-2xl font-semibold">Register</h1>
         </div>
+        {message && !isError && (
+          <p className="mb-2 text-green-500">
+            {message}
+          </p>
+        )}
+        {message && isError && (
+          <p className="mb-2 text-red-500">
+            {message}
+          </p>
+        )}
 
         <form className="grid gap-4" onSubmit={handleSubmit}>
           <label htmlFor="name" className="text-text-secondary">

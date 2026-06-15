@@ -1,10 +1,33 @@
-/*
-Next step:
-- Implement registerUserService here
-- Receive name, email, password from controller
-- Handle duplicate email check, password hashing, and database save
-*/
+import bcrypt from "bcrypt";
+import prisma from "../lib/prisma.js";
 
-export default function registerUserService(name,email,password){
+export default async function registerUserService({ name, email, password }) {
+  const normalizedName = name.trim();
+  const normalizedEmail = email.trim().toLowerCase();
 
+  const existingUser = await prisma.user.findUnique({
+    where: { email: normalizedEmail },
+  });
+
+  if (existingUser) {
+    const error = new Error("Email already exists");
+    error.statusCode = 409;
+    throw error;
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const user = await prisma.user.create({
+    data: {
+      name: normalizedName,
+      email: normalizedEmail,
+      password: hashedPassword,
+    },
+  });
+
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+  };
 }
