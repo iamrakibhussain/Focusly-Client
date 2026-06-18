@@ -1,15 +1,18 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import {
   BarChart3,
   CalendarDays,
   CheckSquare,
   LayoutDashboard,
+  LogOut,
   Settings,
   Target,
   Menu,
   X,
 } from "lucide-react";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
 
 const navItems = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard, end: true },
@@ -22,8 +25,24 @@ const navItems = [
 
 export default function DashboardLayout() {
   const [isSidebarOpen, setisSidebarOpen] = useState(false);
-
   const closeSidebar = () => setisSidebarOpen(false);
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/auth/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error("Logout failed");
+      }
+      navigate("/login", { replace: true });
+    }
+    catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="relative min-h-screen bg-background text-foreground">
@@ -31,18 +50,16 @@ export default function DashboardLayout() {
         <button
           type="button"
           aria-label="Close sidebar"
-          className={`fixed inset-0 z-30 bg-black/50 transition-opacity duration-300 lg:hidden ${
-            isSidebarOpen
-              ? "pointer-events-auto opacity-100"
-              : "pointer-events-none opacity-0"
-          }`}
+          className={`fixed inset-0 z-30 bg-black/50 transition-opacity duration-300 lg:hidden ${isSidebarOpen
+            ? "pointer-events-auto opacity-100"
+            : "pointer-events-none opacity-0"
+            }`}
           onClick={closeSidebar}
         />
 
         <aside
-          className={`fixed inset-y-0 left-0 z-40 w-[min(20rem,85vw)] border-r border-white/10 bg-surface/95 px-4 py-5 shadow-2xl backdrop-blur-xl transition-transform duration-300 ease-out lg:static lg:top-auto lg:z-auto lg:w-auto lg:translate-x-0 lg:bg-surface/70 lg:shadow-none ${
-            isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
+          className={`fixed inset-y-0 left-0 z-40 w-[min(20rem,85vw)] border-r border-white/10 bg-surface/95 px-4 py-5 shadow-2xl backdrop-blur-xl transition-transform duration-300 ease-out lg:static lg:top-auto lg:z-auto lg:w-auto lg:translate-x-0 lg:bg-surface/70 lg:shadow-none ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+            }`}
         >
           <div className="mb-8 flex items-center justify-between gap-3 lg:justify-start">
             <span className="flex h-10 w-10 items-center justify-center rounded-panel bg-primary text-white shadow-glow">
@@ -75,6 +92,16 @@ export default function DashboardLayout() {
               </NavLink>
             ))}
           </nav>
+
+          <div className="mt-6 border-t border-white/10 pt-4">
+            <button
+              onClick={handleLogout} type="button"
+              className="flex w-full items-center gap-3 cursor-pointer rounded-control px-3 py-2 text-sm font-medium text-red-300 transition hover:bg-red-500/10 hover:text-red-200"
+            >
+              <LogOut className="h-4 w-4" />
+              <span>Logout</span>
+            </button>
+          </div>
         </aside>
 
         <div className="flex min-h-screen flex-col lg:min-h-screen">
@@ -83,11 +110,10 @@ export default function DashboardLayout() {
               <div className="flex items-center gap-3">
                 <button
                   type="button"
-                  className={`inline-flex h-10 w-10 flex-none items-center justify-center rounded-control border border-white/10 text-foreground transition hover:bg-white/10 lg:hidden ${
-                    isSidebarOpen
-                      ? "fixed right-4 top-4 z-50 bg-blue-600 shadow-soft"
-                      : "relative z-50 bg-white/5"
-                  }`}
+                  className={`inline-flex h-10 w-10 flex-none items-center justify-center rounded-control border border-white/10 text-foreground transition hover:bg-white/10 lg:hidden ${isSidebarOpen
+                    ? "fixed right-4 top-4 z-50 bg-blue-600 shadow-soft"
+                    : "relative z-50 bg-white/5"
+                    }`}
                   aria-label={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
                   aria-expanded={isSidebarOpen}
                   onClick={() => setisSidebarOpen((current) => !current)}
