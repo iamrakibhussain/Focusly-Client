@@ -11,6 +11,7 @@ import LandingPage from "../pages/LandingPage";
 import LoginPage from "../pages/LoginPage";
 import PublicLayout from "../layouts/PublicLayout";
 import RegisterPage from "../pages/RegisterPage";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 export default function AppRoutes() {
   return (
@@ -22,13 +23,15 @@ export default function AppRoutes() {
         <Route path="forgot-password" element={<ForgotPasswordPage />} />
       </Route>
 
-      <Route element={<DashboardLayout />}>
-        <Route path="dashboard" element={<DashboardPage />} />
-        <Route path="tasks" element={<TasksPage />} />
-        <Route path="planner" element={<PlannerPage />} />
-        <Route path="goals" element={<GoalsPage />} />
-        <Route path="analytics" element={<AnalyticsPage />} />
-        <Route path="settings" element={<SettingsPage />} />
+      <Route element={<ProtectedRoute />}>
+        <Route element={<DashboardLayout />}>
+          <Route path="dashboard" element={<DashboardPage />} />
+          <Route path="tasks" element={<TasksPage />} />
+          <Route path="planner" element={<PlannerPage />} />
+          <Route path="goals" element={<GoalsPage />} />
+          <Route path="analytics" element={<AnalyticsPage />} />
+          <Route path="settings" element={<SettingsPage />} />
+        </Route>
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />

@@ -1,4 +1,8 @@
-import { registerUserService, loginUserService } from "../services/auth.service.js";
+import {
+  registerUserService,
+  loginUserService,
+  getUserByIdService,
+} from "../services/auth.service.js";
 
 export async function registerUser(req, res) {
   const { name, email, password } = req.body;
@@ -37,18 +41,46 @@ export async function loginUser(req, res) {
   }
 
   try {
-    const loggedInUser = await loginUserService({ email, password })
+    const loggedInUser = await loginUserService({ email, password });
+
+    res.cookie("token", loggedInUser.token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
     return res.status(200).json({
       success: true,
       message: "User login successfully!",
-      loggedInUser
-    })
+      loggedInUser: {
+        id: loggedInUser.id,
+        name: loggedInUser.name,
+        email: loggedInUser.email,
+      },
+    });
   }
   catch (error) {
     return res.status(error.statusCode || 500).json({
       success: false,
-      message: error.message
-    })
+      message: error.message,
+    });
   }
 
+}
+
+export async function getMe(req, res) {
+  try {
+    const user = await getUserByIdService(req.user.userId);
+
+    return res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    return res.status(error.statusCode || 500).json({
+      success: false,
+      message: error.message || "Internal server error",
+    });
+  }
 }

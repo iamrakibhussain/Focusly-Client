@@ -1,109 +1,45 @@
 
-# Test Cases
+## এখনই করতে হবে
+এগুলো না করলে auth flow incomplete বা risky থাকবে:
 
-### Test 1
+1. **Logout**
+   - cookie clear করতে হবে
+   - user safely বের হতে পারবে
 
-Valid data
+2. **Server-side validation**
+   - register/login-এ backend validation থাকতে হবে
+   - frontend validation একা যথেষ্ট না
 
-```txt
-Expected: Success
-```
+3. **Basic security hardening**
+   - `httpOnly` cookie
+   - `secure` production-এ
+   - `sameSite` ঠিক রাখা
 
----
+4. **Sensitive data না পাঠানো**
+   - password কখনো return না
+   - `/me` এ safe user data দাও
 
-### Test 2
+5. **Protected routes**
+   - login ছাড়া dashboard access বন্ধ
 
-Duplicate email
+6. **Clean error handling**
+   - consistent error message
+   - unauthorized / invalid token আলাদা handle
 
-```txt
-Expected:
-Email already exists
-```
+## পরে আস্তে আস্তে improve করলে চলবে
+এগুলো এখন না করলেও project চলবে:
 
----
+1. **Rate limiting**
+2. **Refresh token system**
+3. **Email verification**
+4. **Forgot/reset password**
+5. **Role-based access**
+6. **Tests**
+7. **Audit logs**
+8. **Advanced auth context/store**
+9. **Better loading UX**
+10. **Extra performance polish**
 
-### Test 3
-
-Missing password
-
-```txt
-Expected:
-Password is required
-```
-
----
-
-# Phase 6: Frontend Connect
-
-Register Page:
-
-Fields:
-
-```txt
-Name
-Email
-Password
-Confirm Password
-```
-
-Submit:
-
-```txt
-React Form
-    ↓
-Axios POST
-    ↓
-/api/auth/register
-```
-
----
-
-# Register Feature Done হলে Checklist
-
-```txt
-✓ User table created
-
-✓ Prisma connected
-
-✓ Register API created
-
-✓ Validation added
-
-✓ Email uniqueness check
-
-✓ Password hashing
-
-✓ User saved in database
-
-✓ Postman tested
-
-✓ Frontend connected
-```
-
----
-
-# এরপর কী?
-
-Register complete হওয়ার পর:
-
-```txt
-Login Feature
-```
-
-কারণ flow হবে:
-
-```txt
-Register
-    ↓
-Login
-    ↓
-JWT
-    ↓
-Protected Routes
-```
-
-তাই এখন শুধু একটা target:
-
-🎯 **Database → User Model → Register API → Frontend Register Form Integration**
-
-এটা complete না হওয়া পর্যন্ত Login বা JWT-তে যেও না। এতে focus থাকবে এবং debugging অনেক সহজ হবে।
+## শর্ট rule
+- **core auth/security-related** = এখন
+- **advanced improvement** = পরে

@@ -1,11 +1,12 @@
 import { useState } from "react"
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
 
 export default function LoginPage() {
   const [message, setMessage] = useState("")
   const [isError, setIsError] = useState(false)
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
     email: "",
     password: ""
@@ -31,10 +32,16 @@ export default function LoginPage() {
         headers: {
           "Content-Type": "application/json"
         },
+        credentials: "include",
         body: JSON.stringify(formData),
       })
 
       const result = await response.json()
+
+      if (response.ok) {
+        navigate("/dashboard")
+        return
+      }
 
       if (!response.ok) {
         setMessage(result.message)

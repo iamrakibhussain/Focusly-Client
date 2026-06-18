@@ -1,3 +1,4 @@
+import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import prisma from "../lib/prisma.js";
 
@@ -33,12 +34,12 @@ export async function registerUserService({ name, email, password }) {
 }
 
 export async function loginUserService({ email, password }) {
-  const normalizedEmail = email.trim().toLowerCase()
+  const normalizedEmail = email.trim().toLowerCase();
   const user = await prisma.user.findUnique({
     where: {
-      email: normalizedEmail
-    }
-  })
+      email: normalizedEmail,
+    },
+  });
 
   if (!user) {
     const error = new Error("Invalid email or password");
@@ -46,19 +47,43 @@ export async function loginUserService({ email, password }) {
     throw error;
   }
 
-  const isPasswordValid = await bcrypt.compare(
-    password,
-    user.password
-  )
+  const isPasswordValid = await bcrypt.compare(password, user.password);
 
   if (!isPasswordValid) {
     const error = new Error("Invalid email or password");
     error.statusCode = 401;
     throw error;
   }
+
+  const token = jwt.sign(
+    { userId: user.id },
+    process.env.JWT_SECRET,
+    { expiresIn: "7d" }
+  );
+
   return {
     id: user.id,
     name: user.name,
-    email: user.email
+    email: user.email,
+    token,
+  };
+}
+
+export async function getUserByIdService(userId) {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+    },
+  });
+
+  if (!user) {
+    const error = new Error("User not found");
+    error.statusCode = 404;
+    throw error;
   }
+
+  return user;
 }
