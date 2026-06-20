@@ -1,7 +1,7 @@
-import TaskFilters from "../../src/components/tasks/TaskFilters"
-import TaskForm from "../../src/components/tasks/TaskForm"
-import TaskList from "../../src/components/tasks/TaskList"
-import TaskEmptyState from "../../src/components/tasks/TaskEmptyState"
+import TaskFilters from "../components/tasks/TaskFilters";
+import TaskForm from "../components/tasks/TaskForm";
+import TaskList from "../components/tasks/TaskList";
+import TaskEmptyState from "../components/tasks/TaskEmptyState";
 /*
 TasksPage.jsx
 Purpose:

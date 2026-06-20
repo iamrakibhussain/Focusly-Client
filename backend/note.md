@@ -6,7 +6,7 @@
 1. **Backend CORS origin** Done
    - localhost না, deployed frontend URL দিতে হবে
 
-2. **Environment variables**
+2. **Environment variables** Done
    - `DATABASE_URL`
    - `JWT_SECRET`
    - `VITE_API_BASE_URL`
