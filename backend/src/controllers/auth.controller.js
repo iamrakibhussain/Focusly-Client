@@ -4,6 +4,17 @@ import {
   getUserByIdService,
 } from "../services/auth.service.js";
 
+function getAuthCookieOptions() {
+  const isProduction = process.env.NODE_ENV === "production";
+
+  return {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
+    path: "/",
+  };
+}
+
 export async function registerUser(req, res) {
   const { name, email, password } = req.body;
 
@@ -44,10 +55,7 @@ export async function loginUser(req, res) {
     const loggedInUser = await loginUserService({ email, password });
 
     res.cookie("token", loggedInUser.token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
+      ...getAuthCookieOptions(),
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -87,12 +95,8 @@ export async function getMe(req, res) {
 }
 
 export async function logoutUser(req, res) {
-  res.clearCookie("token", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/"
-  })
+  res.clearCookie("token", getAuthCookieOptions());
+
   return res.status(200).json({
     success: true,
     message: "Logged out successfully",

@@ -23,9 +23,11 @@ export default function ProtectedRoute() {
         if (!isMounted) return;
 
         setIsAuthenticated(false);
-      } finally {
-        if (!isMounted) return;
+      }
 
+      if (!isMounted) return;
+
+      if (isMounted) {
         setIsLoading(false);
       }
     }
