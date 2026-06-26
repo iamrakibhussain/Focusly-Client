@@ -6,13 +6,13 @@ import authRouter from './routes/auth.routes.js'
 import taskRouter from './routes/task.routes.js'
 
 const app = express();
-const allowedOrigins = [
-  process.env.FRONTEND_URL,
-  "http://localhost:5173",
-].filter(Boolean);
+// const allowedOrigins = [
+//   process.env.FRONTEND_URL,
+//   "http://localhost:5173",
+// ].filter(Boolean);
 
 app.use(cors({
-  origin:allowedOrigins,
+  origin:process.env.FRONTEND_URL || "http://localhost:5173",
   credentials: true,
 }))
 app.use(cookieParser());
