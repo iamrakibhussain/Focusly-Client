@@ -116,9 +116,8 @@ export default function TaskForm({ onTaskCreated }) {
   };
 
   return (
-    <section className="overflow-hidden rounded-panel border border-white/10 bg-surface/80 shadow-soft">
+    <section className="overflow-hidden rounded-panel border border-white/10 bg-slate-900/70 shadow-soft">
       <div className="h-1 w-full bg-gradient-to-r from-primary via-accent to-cyan-300" />
-
       <div className="p-5">
         <div className="mb-5 flex flex-col gap-2">
           <p className="text-sm font-medium uppercase tracking-[0.18em] text-accent">

@@ -3,7 +3,7 @@ export default function TaskList({ tasks = [] }) {
   const hasTasks = tasks.length > 0;
 
   return (
-    <section className="rounded-panel border border-white/10 bg-surface/80 p-5 shadow-soft">
+    <section className="rounded-panel border border-white/10 bg-slate-900/70 p-5 shadow-soft">
       <div className="mb-4 flex items-center justify-between gap-3">
         <div>
           <p className="text-sm text-text-secondary">Your tasks</p>
