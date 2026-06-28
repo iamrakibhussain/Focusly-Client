@@ -29,14 +29,14 @@ export default function TaskFilters({ filters, onFilterChange, onReset }) {
     <section className="overflow-hidden rounded-panel border border-white/10 bg-surface/80 shadow-soft">
       <div className="h-1 w-full bg-gradient-to-r from-primary via-accent to-cyan-300" />
 
-      <div className="p-5 sm:p-6">
-        <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div className="p-4 sm:p-5 sm:pb-6">
+        <div className="mb-5 flex flex-col gap-4 sm:items-end sm:justify-between lg:flex-row">
           <div className="space-y-2">
             <p className="inline-flex items-center gap-2 text-sm font-medium uppercase tracking-[0.18em] text-accent">
               <SlidersHorizontal className="h-4 w-4" />
               Task Filters
             </p>
-            <h3 className="text-xl font-semibold text-foreground">
+            <h3 className="text-lg font-semibold text-foreground sm:text-xl">
               Refine your task list
             </h3>
             <p className="max-w-2xl text-sm leading-6 text-text-secondary">
@@ -48,7 +48,7 @@ export default function TaskFilters({ filters, onFilterChange, onReset }) {
           <button
             type="button"
             onClick={onReset}
-            className="inline-flex items-center justify-center gap-2 rounded-control border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-medium text-text-secondary transition hover:bg-white/10 hover:text-foreground"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-control border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-medium text-text-secondary transition hover:bg-white/10 hover:text-foreground sm:w-auto"
           >
             <RotateCcw className="h-4 w-4" />
             Reset filters
@@ -56,7 +56,7 @@ export default function TaskFilters({ filters, onFilterChange, onReset }) {
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          <div className="space-y-2 xl:col-span-2">
+          <div className="space-y-2 md:col-span-2">
             <label htmlFor="search" className={labelClassName}>
               Search
             </label>

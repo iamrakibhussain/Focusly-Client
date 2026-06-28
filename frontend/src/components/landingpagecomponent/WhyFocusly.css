@@ -121,7 +121,7 @@
 
 @media (max-width: 700px) {
   .why-focusly__inner {
-    width: min(76rem, calc(100% - 3rem));
+    width: min(76rem, calc(100% - 2rem));
   }
 
   .why-focusly__grid {

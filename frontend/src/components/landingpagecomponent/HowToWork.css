@@ -159,7 +159,7 @@
 
 @media (max-width: 640px) {
   .how-to-work__inner {
-    width: min(76rem, calc(100% - 4.3rem));
+    width: min(76rem, calc(100% - 2rem));
   }
 
   .how-to-work__steps {

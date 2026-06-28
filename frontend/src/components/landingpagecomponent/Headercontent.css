@@ -182,5 +182,13 @@
   .public-header__logo {
     width: 10rem;
   }
-  
+
+  .public-header__mobile {
+    left: 0.75rem;
+    right: 0.75rem;
+    top: calc(100% + 0.5rem);
+    width: auto;
+    max-height: calc(100vh - 6rem);
+    overflow-y: auto;
+  }
 }

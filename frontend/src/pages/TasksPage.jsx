@@ -61,6 +61,13 @@ export default function TasksPage() {
     });
   };
 
+  const scrollToTaskForm = () => {
+    document.getElementById("task-form")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
+
   const loadTasks = async () => {
     setIsLoading(true);
 
@@ -106,20 +113,24 @@ export default function TasksPage() {
   }
 
   return (
-    <section className="space-y-6">
-      <div>
-        <p className="text-sm text-text-secondary">Workflow</p>
-        <h2 className="text-3xl font-semibold">Tasks</h2>
+    <section className="space-y-4 sm:space-y-6">
+      <div className="space-y-1">
+        <p className="text-xs font-medium uppercase tracking-[0.18em] text-accent sm:text-sm">
+          Workflow
+        </p>
+        <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+          Tasks
+        </h2>
       </div>
 
-      <div className="rounded-panel border border-white/10 bg-surface/80 p-5 shadow-soft">
-        <p className="text-text-secondary">
+      <div className="rounded-panel border border-white/10 bg-surface/80 p-4 shadow-soft sm:p-5">
+        <p className="text-sm leading-6 text-text-secondary sm:text-base">
           Manage assignments, deadlines, and daily study tasks.
         </p>
       </div>
 
       {message && error && (
-        <div className="rounded-panel border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-200">
+        <div className="rounded-panel border border-red-500/20 bg-red-500/10 p-4 text-sm leading-6 text-red-200">
           {message}
         </div>
       )}
@@ -130,17 +141,14 @@ export default function TasksPage() {
         onReset={handleResetFilters}
       />
 
-      <TaskForm onTaskCreated={loadTasks} />
+      <div id="task-form">
+        <TaskForm onTaskCreated={loadTasks} />
+      </div>
 
       {tasks.length === 0 ? (
-        <TaskEmptyState />
+        <TaskEmptyState type="empty" onAction={scrollToTaskForm} />
       ) : filteredTasks.length === 0 ? (
-        <div className="rounded-panel border border-dashed border-white/15 bg-surface/60 p-6 text-center">
-          <h3 className="text-lg font-semibold">No matching tasks found</h3>
-          <p className="mt-2 text-sm text-text-secondary">
-            Try changing the search term or clearing the filters.
-          </p>
-        </div>
+        <TaskEmptyState type="filtered" onAction={handleResetFilters} />
       ) : (
         <TaskList tasks={filteredTasks} />
       )}

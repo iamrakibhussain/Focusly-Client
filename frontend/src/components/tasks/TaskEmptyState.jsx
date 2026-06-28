@@ -1,26 +1,41 @@
-/*
-TaskEmptyState.jsx
-Purpose:
-- Show a friendly message when no tasks exist or no task matches filters.
+const emptyStateContent = {
+  empty: {
+    eyebrow: "No tasks yet",
+    title: "Create your first task",
+    description:
+      "Add a study task to start organizing your workflow and deadlines.",
+    actionLabel: "Create Task",
+  },
+  filtered: {
+    eyebrow: "No results found",
+    title: "Try a different filter",
+    description:
+      "Your tasks exist, but none match the current search or filter settings.",
+    actionLabel: "Clear Filters",
+  },
+};
 
-Requirements:
-- Provide a clear empty state message.
-- Show helpful next action like "Create Task".
-- Differentiate between "no tasks yet" and "no results found".
+export default function TaskEmptyState({ type = "empty", onAction }) {
+  const current = emptyStateContent[type] || emptyStateContent.empty;
 
-Challenges to solve later:
-- Keep the empty state helpful without becoming cluttered.
-- Reuse the same component for both blank state and filtered empty state.
-*/
-
-export default function TaskEmptyState() {
   return (
-    <section className="rounded-panel border border-dashed border-white/15 bg-surface/60 p-8 text-center">
-      <p className="text-sm text-text-secondary">TaskEmptyState scaffold</p>
-      <h3 className="mt-2 text-lg font-semibold">No tasks yet</h3>
-      <p className="mt-2 text-sm text-text-secondary">
-        This component will later guide the user to create their first task.
+    <section className="rounded-panel border border-dashed border-white/15 bg-surface/60 p-6 text-center shadow-soft sm:p-8">
+      <p className="text-sm font-medium uppercase tracking-[0.18em] text-accent">
+        {current.eyebrow}
       </p>
+      <h3 className="mt-3 text-lg font-semibold text-foreground sm:text-xl">
+        {current.title}
+      </h3>
+      <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-text-secondary">
+        {current.description}
+      </p>
+      <button
+        type="button"
+        onClick={onAction}
+        className="mt-6 inline-flex w-full items-center justify-center rounded-control border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-foreground transition hover:bg-white/10 sm:w-auto"
+      >
+        {current.actionLabel}
+      </button>
     </section>
   );
 }

@@ -45,7 +45,7 @@ export default function DashboardLayout() {
   };
 
   return (
-    <div className="relative min-h-screen bg-background text-foreground">
+    <div className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
       <div className="mx-auto min-h-screen w-full max-w-7xl lg:grid lg:grid-cols-[260px_1fr]">
         <button
           type="button"
@@ -58,7 +58,7 @@ export default function DashboardLayout() {
         />
 
         <aside
-          className={`fixed inset-y-0 left-0 z-40 w-[min(20rem,85vw)] border-r border-white/10 bg-surface/95 px-4 py-5 shadow-2xl backdrop-blur-xl transition-transform duration-300 ease-out lg:static lg:top-auto lg:z-auto lg:w-auto lg:translate-x-0 lg:bg-surface/70 lg:shadow-none ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          className={`fixed inset-y-0 left-0 z-40 h-full w-[min(20rem,85vw)] overflow-y-auto border-r border-white/10 bg-surface/95 px-4 py-5 shadow-2xl backdrop-blur-xl transition-transform duration-300 ease-out lg:static lg:top-auto lg:z-auto lg:w-auto lg:translate-x-0 lg:bg-surface/70 lg:shadow-none ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
             }`}
         >
           <div className="mb-8 flex items-center justify-between gap-3 lg:justify-start">
@@ -81,8 +81,8 @@ export default function DashboardLayout() {
                   [
                     "flex items-center gap-3 rounded-control px-3 py-2 text-sm transition",
                     isActive
-                      ? "bg-primary text-white shadow-glow"
-                      : "text-text-secondary hover:bg-white/5 hover:text-foreground",
+                  ? "bg-primary text-white shadow-glow"
+                  : "text-text-secondary hover:bg-white/5 hover:text-foreground",
                   ].join(" ")
                 }
                 onClick={closeSidebar}
@@ -95,8 +95,9 @@ export default function DashboardLayout() {
 
           <div className="mt-6 border-t border-white/10 pt-4">
             <button
-              onClick={handleLogout} type="button"
-              className="flex w-full items-center gap-3 cursor-pointer rounded-control px-3 py-2 text-sm font-medium text-red-300 transition hover:bg-red-500/10 hover:text-red-200"
+              onClick={handleLogout}
+              type="button"
+              className="flex w-full items-center gap-3 rounded-control px-3 py-2 text-left text-sm font-medium text-red-300 transition hover:bg-red-500/10 hover:text-red-200"
             >
               <LogOut className="h-4 w-4" />
               <span>Logout</span>
@@ -104,9 +105,9 @@ export default function DashboardLayout() {
           </div>
         </aside>
 
-        <div className="flex min-h-screen flex-col lg:min-h-screen">
-          <header className="border-b border-white/10 bg-surface/40 px-4 py-4 backdrop-blur sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between gap-4">
+        <div className="flex min-w-0 min-h-screen flex-col lg:min-h-screen">
+          <header className="sticky top-0 z-20 border-b border-white/10 bg-surface/50 px-4 py-4 backdrop-blur-sm sm:px-6 lg:px-8">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
               <div className="flex items-center gap-3">
                 <button
                   type="button"
@@ -127,16 +128,18 @@ export default function DashboardLayout() {
 
                 <div>
                   <p className="text-sm text-text-secondary">Welcome back</p>
-                  <h1 className="text-lg font-semibold">Your workspace</h1>
+                  <h1 className="text-base font-semibold sm:text-lg">
+                    Your workspace
+                  </h1>
                 </div>
               </div>
-              <div className="rounded-control border border-white/10 bg-white/5 px-3 py-2 text-sm text-text-secondary">
+              <div className="hidden rounded-control border border-white/10 bg-white/5 px-3 py-2 text-sm text-text-secondary sm:inline-flex">
                 Pro Workspace
               </div>
             </div>
           </header>
 
-          <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8">
+          <main className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-8">
             <Outlet />
           </main>
         </div>

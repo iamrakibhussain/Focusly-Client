@@ -100,7 +100,7 @@
 
 @media (max-width: 640px) {
   .cta-section__inner {
-    width: min(76rem, calc(100% - 3rem));
+    width: min(76rem, calc(100% - 2rem));
   }
 
   .cta-section__panel {

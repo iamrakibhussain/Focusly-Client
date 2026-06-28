@@ -146,7 +146,7 @@
 
 @media (max-width: 640px) {
   .testimonial-section__inner {
-    width: min(76rem, calc(100% - 3rem));
+    width: min(76rem, calc(100% - 2rem));
   }
 
   .testimonial-grid {

@@ -29,10 +29,10 @@ function getPriorityClass(priority) {
 
 export default function TaskCard({ task }) {
   return (
-    <article className="rounded-panel border border-white/10 bg-background p-4 shadow-soft transition hover:border-white/15">
-      <div className="flex items-start justify-between gap-4">
+    <article className="rounded-panel border border-white/10 bg-background p-4 shadow-soft transition hover:border-white/15 sm:p-5">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0 flex-1">
-          <h4 className="truncate text-base font-semibold text-foreground">
+          <h4 className="text-base font-semibold leading-6 text-foreground sm:truncate">
             {task.title}
           </h4>
           {task.description ? (
@@ -47,7 +47,7 @@ export default function TaskCard({ task }) {
         </div>
 
         <span
-          className={`shrink-0 rounded-full border px-3 py-1 text-xs font-medium ${getPriorityClass(
+          className={`inline-flex w-fit shrink-0 rounded-full border px-3 py-1 text-xs font-medium ${getPriorityClass(
             task.priority
           )}`}
         >

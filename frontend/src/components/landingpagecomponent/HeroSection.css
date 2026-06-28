@@ -328,12 +328,36 @@
   }
 
   .hero-button {
-    font-size: 12px;
-    width: 57%;
-    font-weight: 800;
+    width: 100%;
+    font-size: 0.95rem;
+  }
+
+  .hero-preview-wrap {
+    width: 100%;
+  }
+
+  .dashboard-preview {
+    width: 100%;
+    padding: 1rem;
+  }
+
+  .dashboard-preview__top,
+  .dashboard-preview__section-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
   }
 
   .dashboard-preview__stats {
     grid-template-columns: 1fr;
+  }
+
+  .dashboard-mini-card strong {
+    font-size: 1.2rem;
+  }
+
+  .dashboard-preview__session,
+  .dashboard-task {
+    align-items: flex-start;
   }
 }

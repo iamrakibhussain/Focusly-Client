@@ -100,7 +100,7 @@
 
 @media (max-width: 640px) {
   .footer__inner {
-    width: min(76rem, calc(100% - 3rem));
+    width: min(76rem, calc(100% - 2rem));
   }
 
   .footer__grid {

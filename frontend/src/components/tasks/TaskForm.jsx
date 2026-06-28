@@ -25,7 +25,10 @@ export default function TaskForm({ onTaskCreated }) {
   const [formData, setFormData] = useState(initialFormData);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [message, setMessage] = useState("");
+  const [feedback, setFeedback] = useState({
+    type: "",
+    text: "",
+  });
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -42,19 +45,28 @@ export default function TaskForm({ onTaskCreated }) {
       }));
     }
 
-    if (message) {
-      setMessage("");
+    if (feedback.type) {
+      setFeedback({
+        type: "",
+        text: "",
+      });
     }
   };
 
   const validateForm = () => {
     const nextErrors = {};
+    const trimmedTitle = formData.title.trim();
+    const trimmedDescription = formData.description.trim();
 
-    if (!formData.title.trim()) {
+    if (!trimmedTitle) {
       nextErrors.title = "Task title is required.";
+    } else if (trimmedTitle.length < 3) {
+      nextErrors.title = "Task title should be at least 3 characters.";
+    } else if (trimmedTitle.length > 80) {
+      nextErrors.title = "Task title should stay within 80 characters.";
     }
 
-    if (formData.description.length > 280) {
+    if (trimmedDescription.length > 280) {
       nextErrors.description = "Description should stay within 280 characters.";
     }
 
@@ -80,7 +92,9 @@ export default function TaskForm({ onTaskCreated }) {
         description: formData.description.trim(),
         priority: formData.priority,
         status: formData.status,
-        ...(formData.dueDate ? { dueDate: new Date (formData.dueDate).toISOString() } : {}),
+        ...(formData.dueDate
+          ? { dueDate: new Date(formData.dueDate).toISOString() }
+          : {}),
       };
 
       const response = await fetch(`${API_BASE_URL}/api/tasks`, {
@@ -94,16 +108,24 @@ export default function TaskForm({ onTaskCreated }) {
       const result = await response.json();
 
       if (!response.ok) {
-        setMessage(result.message || "Task could not be created.");
-        setErrors({ submit: result.message || "Task could not be created." });
-        return
+        setFeedback({
+          type: "error",
+          text: result.message || "Task could not be created.",
+        });
+        return;
       }
 
-      setMessage(result.message || "Task created successfully.");
+      setFeedback({
+        type: "success",
+        text: result.message || "Task created successfully.",
+      });
       await onTaskCreated?.();
       setFormData(initialFormData);
     } catch (error) {
-      setMessage(error.message || "Something went wrong.");
+      setFeedback({
+        type: "error",
+        text: error.message || "Something went wrong.",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -112,18 +134,24 @@ export default function TaskForm({ onTaskCreated }) {
   const handleReset = () => {
     setFormData(initialFormData);
     setErrors({});
-    setMessage("");
+    setFeedback({
+      type: "",
+      text: "",
+    });
   };
 
   return (
-    <section className="overflow-hidden rounded-panel border border-white/10 bg-slate-900/70 shadow-soft">
+    <section
+      id="task-form-section"
+      className="overflow-hidden rounded-panel border border-white/10 bg-slate-900/70 shadow-soft"
+    >
       <div className="h-1 w-full bg-gradient-to-r from-primary via-accent to-cyan-300" />
-      <div className="p-5">
+      <div className="p-4 sm:p-5">
         <div className="mb-5 flex flex-col gap-2">
           <p className="text-sm font-medium uppercase tracking-[0.18em] text-accent">
             Task Builder
           </p>
-          <h3 className="text-xl font-semibold text-foreground">
+          <h3 className="text-lg font-semibold text-foreground sm:text-xl">
             Create / Edit Task
           </h3>
           <p className="max-w-2xl text-sm leading-6 text-text-secondary">
@@ -132,15 +160,15 @@ export default function TaskForm({ onTaskCreated }) {
           </p>
         </div>
 
-        {message && (
+        {feedback.text && feedback.type === "success" && (
           <div className="mb-4 rounded-control border border-cyan-500/20 bg-cyan-500/10 px-4 py-3 text-sm text-cyan-100">
-            {message}
+            {feedback.text}
           </div>
         )}
 
-        {errors.submit && (
+        {feedback.text && feedback.type === "error" && (
           <div className="mb-4 rounded-control border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">
-            {errors.submit}
+            {feedback.text}
           </div>
         )}
 
@@ -156,9 +184,18 @@ export default function TaskForm({ onTaskCreated }) {
               placeholder="e.g. Finish math revision"
               value={formData.title}
               onChange={handleChange}
+              autoComplete="off"
+              minLength={3}
+              maxLength={80}
+              aria-invalid={Boolean(errors.title)}
+              aria-describedby={errors.title ? "task-title-error" : undefined}
               className="rounded-control border border-white/10 bg-background px-4 py-3 text-foreground outline-none transition placeholder:text-text-secondary focus:border-primary"
             />
-            {errors.title && <p className="text-sm text-red-300">{errors.title}</p>}
+            {errors.title && (
+              <p id="task-title-error" className="text-sm text-red-300">
+                {errors.title}
+              </p>
+            )}
           </div>
 
           <div className="grid gap-2">
@@ -175,6 +212,9 @@ export default function TaskForm({ onTaskCreated }) {
               placeholder="Add a short note about what needs to be done..."
               value={formData.description}
               onChange={handleChange}
+              maxLength={280}
+              aria-invalid={Boolean(errors.description)}
+              aria-describedby={errors.description ? "task-description-error" : undefined}
               className="rounded-control border border-white/10 bg-background px-4 py-3 text-foreground outline-none transition placeholder:text-text-secondary focus:border-primary"
             />
             <div className="flex items-center justify-between gap-3 text-xs text-text-secondary">
@@ -182,7 +222,9 @@ export default function TaskForm({ onTaskCreated }) {
               <p>{formData.description.length}/280</p>
             </div>
             {errors.description && (
-              <p className="text-sm text-red-300">{errors.description}</p>
+              <p id="task-description-error" className="text-sm text-red-300">
+                {errors.description}
+              </p>
             )}
           </div>
 
@@ -199,6 +241,7 @@ export default function TaskForm({ onTaskCreated }) {
                 name="priority"
                 value={formData.priority}
                 onChange={handleChange}
+                disabled={isSubmitting}
                 className="rounded-control border border-white/10 bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary"
               >
                 {priorityOptions.map((option) => (
@@ -221,6 +264,7 @@ export default function TaskForm({ onTaskCreated }) {
                 name="status"
                 value={formData.status}
                 onChange={handleChange}
+                disabled={isSubmitting}
                 className="rounded-control border border-white/10 bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary"
               >
                 {statusOptions.map((option) => (
@@ -242,6 +286,7 @@ export default function TaskForm({ onTaskCreated }) {
               type="date"
               value={formData.dueDate}
               onChange={handleChange}
+              disabled={isSubmitting}
               className="rounded-control border border-white/10 bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary"
             />
           </div>
@@ -250,7 +295,7 @@ export default function TaskForm({ onTaskCreated }) {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex items-center justify-center rounded-control bg-primary px-4 py-3 font-medium text-white shadow-glow transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-70"
+              className="inline-flex w-full items-center justify-center rounded-control bg-primary px-4 py-3 font-medium text-white shadow-glow transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
             >
               {isSubmitting ? "Saving..." : "Save Task"}
             </button>
@@ -258,7 +303,7 @@ export default function TaskForm({ onTaskCreated }) {
             <button
               type="button"
               onClick={handleReset}
-              className="inline-flex items-center justify-center rounded-control border border-white/10 bg-white/5 px-4 py-3 font-medium text-text-secondary transition hover:bg-white/10 hover:text-foreground"
+              className="inline-flex w-full items-center justify-center rounded-control border border-white/10 bg-white/5 px-4 py-3 font-medium text-text-secondary transition hover:bg-white/10 hover:text-foreground sm:w-auto"
             >
               Reset
             </button>

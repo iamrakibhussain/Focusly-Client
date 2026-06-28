@@ -3,13 +3,13 @@ export default function TaskList({ tasks = [] }) {
   const hasTasks = tasks.length > 0;
 
   return (
-    <section className="rounded-panel border border-white/10 bg-slate-900/70 p-5 shadow-soft">
-      <div className="mb-4 flex items-center justify-between gap-3">
+    <section className="rounded-panel border border-white/10 bg-slate-900/70 p-4 shadow-soft sm:p-5">
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-sm text-text-secondary">Your tasks</p>
-          <h3 className="text-lg font-semibold">Task List</h3>
+          <h3 className="text-lg font-semibold text-foreground">Task List</h3>
         </div>
-        <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-text-secondary">
+        <span className="inline-flex w-fit rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-text-secondary">
           {tasks.length} {tasks.length === 1 ? "task" : "tasks"}
         </span>
       </div>
