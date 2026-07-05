@@ -11,12 +11,13 @@ export default function TasksPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
+  const [editingTask, setEditingTask] = useState(null);
   const [filters, setFilters] = useState({
     search: "",
     priority: "ALL",
     status: "ALL",
-    dueDate: ""
-  })
+    dueDate: "",
+  });
 
   const formatDateForFilter = (dateValue) => {
     if (!dateValue) return "";
@@ -93,9 +94,77 @@ export default function TasksPage() {
     }
   };
 
+  const handleEditTask = (task) => {
+    setEditingTask(task);
+    scrollToTaskForm();
+  };
+
+  const handleCancelEdit = () => {
+    setEditingTask(null);
+  };
+
   useEffect(() => {
+    // Initial client-side fetch on page mount.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadTasks();
   }, []);
+
+
+  const handleDeleteTask = async (taskId) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this task?");
+    if (!confirmDelete) return;
+
+    try {
+      setMessage("");
+      setError(false);
+
+      const response = await fetch(`${API_BASE_URL}/api/tasks/${taskId}`, {
+        method: "DELETE",
+        credentials: "include"
+      })
+      const result = await response.json()
+
+      if (!response.ok) {
+        throw new Error(result.message || "Task could not be deleted.")
+      }
+      if (editingTask && editingTask.id === taskId) {
+        setEditingTask(null)
+      }
+      await loadTasks()
+    }
+    catch (error) {
+      setMessage(error.message)
+      setError(true)
+    }
+  }
+
+  const handleToggleTaskStatus = async (task) => {
+    const toggledStatus = task.status === "COMPLETED" ? "PENDING" : "COMPLETED";
+
+    try {
+      setMessage("");
+      setError(false);
+
+      const response = await fetch(`${API_BASE_URL}/api/tasks/${task.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          status: toggledStatus,
+        }),
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.message || "Status could not be updated.");
+      }
+      await loadTasks();
+    }
+    catch (error) {
+      setMessage(error.message);
+      setError(true);
+    }
+  }
+
 
   if (isLoading) {
     return (
@@ -142,7 +211,12 @@ export default function TasksPage() {
       />
 
       <div id="task-form">
-        <TaskForm onTaskCreated={loadTasks} />
+        <TaskForm
+          key={editingTask?.id || "create-task-form"}
+          onTaskCreated={loadTasks}
+          editingTask={editingTask}
+          onCancelEdit={handleCancelEdit}
+        />
       </div>
 
       {tasks.length === 0 ? (
@@ -150,7 +224,12 @@ export default function TasksPage() {
       ) : filteredTasks.length === 0 ? (
         <TaskEmptyState type="filtered" onAction={handleResetFilters} />
       ) : (
-        <TaskList tasks={filteredTasks} />
+        <TaskList
+          tasks={filteredTasks}
+          onEdit={handleEditTask}
+          onDelete={handleDeleteTask}
+          onToggleStatus={handleToggleTaskStatus}
+        />
       )}
     </section>
   );

@@ -1,5 +1,6 @@
 import TaskCard from "./TaskCard";
-export default function TaskList({ tasks = [] }) {
+
+export default function TaskList({ tasks = [], onEdit, onDelete, onToggleStatus }) {
   const hasTasks = tasks.length > 0;
 
   return (
@@ -17,7 +18,12 @@ export default function TaskList({ tasks = [] }) {
       {hasTasks ? (
         <div className="grid gap-3">
           {tasks.map((task) => (
-            <TaskCard key={task.id} task={task} />
+            <TaskCard 
+            key={task.id} 
+            task={task} 
+            onEdit={onEdit} 
+            onDelete={onDelete}
+            onToggleStatus={onToggleStatus} />
           ))}
         </div>
       ) : (

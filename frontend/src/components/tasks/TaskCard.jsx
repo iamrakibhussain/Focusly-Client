@@ -1,3 +1,5 @@
+import { CheckCircle2, PencilLine, RotateCcw, Trash2 } from "lucide-react";
+
 function formatDate(dateValue) {
   if (!dateValue) {
     return "No due date";
@@ -27,7 +29,14 @@ function getPriorityClass(priority) {
   }
 }
 
-export default function TaskCard({ task }) {
+export default function TaskCard({ task, onEdit, onDelete, onToggleStatus }) {
+  const isCompleted = task.status === "COMPLETED";
+  const statusButtonClass = isCompleted
+    ? "border border-emerald-500/20 bg-emerald-500/10 text-emerald-200 hover:bg-emerald-500/20"
+    : "border border-amber-500/20 bg-amber-500/10 text-amber-200 hover:bg-amber-500/20";
+  const StatusIcon = isCompleted ? RotateCcw : CheckCircle2;
+  const statusButtonLabel = isCompleted ? "Reopen" : "Mark Complete";
+
   return (
     <article className="rounded-panel border border-white/10 bg-background p-4 shadow-soft transition hover:border-white/15 sm:p-5">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -62,6 +71,36 @@ export default function TaskCard({ task }) {
         <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1">
           Due: {formatDate(task.dueDate)}
         </span>
+        <button
+          type="button"
+          onClick={() => onEdit?.(task)}
+          title="Edit task"
+          aria-label="Edit task"
+          className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 font-medium text-foreground transition hover:bg-white/10"
+        >
+          <PencilLine className="h-3.5 w-3.5" />
+          <span>Edit</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => onDelete?.(task.id)}
+          title="Delete task"
+          aria-label="Delete task"
+          className="inline-flex items-center gap-2 rounded-full border border-red-500/20 bg-red-500/10 px-3 py-1 font-medium text-red-200 transition hover:bg-red-500/20"
+        >
+          <Trash2 className="h-3.5 w-3.5" />
+          Delete
+        </button>
+        <button
+          type="button"
+          onClick={() => onToggleStatus?.(task)}
+          title={statusButtonLabel}
+          aria-label={statusButtonLabel}
+          className={`inline-flex items-center gap-2 rounded-full px-3 py-1 font-medium transition ${statusButtonClass}`}
+        >
+          <StatusIcon className="h-3.5 w-3.5" />
+          <span>{statusButtonLabel}</span>
+        </button>
       </div>
     </article>
   );

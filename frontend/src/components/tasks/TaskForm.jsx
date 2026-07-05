@@ -21,10 +21,43 @@ const statusOptions = [
   { value: "COMPLETED", label: "Completed" },
 ];
 
-export default function TaskForm({ onTaskCreated }) {
-  const [formData, setFormData] = useState(initialFormData);
+function formatDateForInput(dateValue) {
+  if (!dateValue) {
+    return "";
+  }
+
+  const parsedDate = new Date(dateValue);
+
+  if (Number.isNaN(parsedDate.getTime())) {
+    return "";
+  }
+
+  return parsedDate.toISOString().slice(0, 10);
+}
+
+function buildFormData(task) {
+  if (!task) {
+    return initialFormData;
+  }
+
+  return {
+    title: task.title || "",
+    description: task.description || "",
+    priority: task.priority || "MEDIUM",
+    status: task.status || "PENDING",
+    dueDate: formatDateForInput(task.dueDate),
+  };
+}
+
+export default function TaskForm({
+  onTaskCreated,
+  editingTask,
+  onCancelEdit,
+}) {
+  const [formData, setFormData] = useState(() => buildFormData(editingTask));
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const isEditMode = Boolean(editingTask);
   const [feedback, setFeedback] = useState({
     type: "",
     text: "",
@@ -96,9 +129,12 @@ export default function TaskForm({ onTaskCreated }) {
           ? { dueDate: new Date(formData.dueDate).toISOString() }
           : {}),
       };
-
-      const response = await fetch(`${API_BASE_URL}/api/tasks`, {
-        method: "POST",
+      const url = isEditMode
+        ? `${API_BASE_URL}/api/tasks/${editingTask.id}`
+        : `${API_BASE_URL}/api/tasks`;
+      const method = isEditMode ? "PUT" : "POST";
+      const response = await fetch(url, {
+        method,
         headers: {
           "Content-Type": "application/json",
         },
@@ -110,17 +146,23 @@ export default function TaskForm({ onTaskCreated }) {
       if (!response.ok) {
         setFeedback({
           type: "error",
-          text: result.message || "Task could not be created.",
+          text: result.message || "Task could not be saved.",
         });
         return;
       }
 
       setFeedback({
         type: "success",
-        text: result.message || "Task created successfully.",
+        text:
+          result.message ||
+          (isEditMode
+            ? "Task updated successfully."
+            : "Task created successfully."),
       });
-      await onTaskCreated?.();
       setFormData(initialFormData);
+      setErrors({});
+      onCancelEdit?.();
+      await onTaskCreated?.();
     } catch (error) {
       setFeedback({
         type: "error",
@@ -138,6 +180,7 @@ export default function TaskForm({ onTaskCreated }) {
       type: "",
       text: "",
     });
+    onCancelEdit?.();
   };
 
   return (
@@ -152,11 +195,12 @@ export default function TaskForm({ onTaskCreated }) {
             Task Builder
           </p>
           <h3 className="text-lg font-semibold text-foreground sm:text-xl">
-            Create / Edit Task
+            {isEditMode ? "Edit Task" : "Create Task"}
           </h3>
           <p className="max-w-2xl text-sm leading-6 text-text-secondary">
-            Add a new study task with priority, status, and deadline in a clean
-            workflow-friendly layout.
+            {isEditMode
+              ? "Update the selected task and save your changes."
+              : "Add a new study task with priority, status, and deadline in a clean workflow-friendly layout."}
           </p>
         </div>
 
@@ -297,7 +341,11 @@ export default function TaskForm({ onTaskCreated }) {
               disabled={isSubmitting}
               className="inline-flex w-full items-center justify-center rounded-control bg-primary px-4 py-3 font-medium text-white shadow-glow transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
             >
-              {isSubmitting ? "Saving..." : "Save Task"}
+              {isSubmitting
+                ? "Saving..."
+                : isEditMode
+                  ? "Update Task"
+                  : "Save Task"}
             </button>
 
             <button
@@ -305,7 +353,7 @@ export default function TaskForm({ onTaskCreated }) {
               onClick={handleReset}
               className="inline-flex w-full items-center justify-center rounded-control border border-white/10 bg-white/5 px-4 py-3 font-medium text-text-secondary transition hover:bg-white/10 hover:text-foreground sm:w-auto"
             >
-              Reset
+              {isEditMode ? "Cancel Edit" : "Reset"}
             </button>
           </div>
         </form>
