@@ -1,3 +1,11 @@
+/*
+File Purpose:
+Public registration page for new account creation.
+
+Connected With:
+- backend/src/routes/auth.routes.js
+- frontend/src/services/authService.js later if shared
+*/
 import { useState } from "react";
 import { Link } from "react-router-dom";
 

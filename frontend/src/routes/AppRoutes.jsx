@@ -1,3 +1,12 @@
+/*
+File Purpose:
+Application route map. Separates public and protected navigation.
+
+Connected With:
+- frontend/src/layouts/PublicLayout.jsx
+- frontend/src/layouts/DashboardLayout.jsx
+- frontend/src/components/ProtectedRoute.jsx
+*/
 import { Navigate, Route, Routes } from "react-router-dom";
 import DashboardPage from "../pages/DashboardPage";
 import TasksPage from "../pages/TasksPage";

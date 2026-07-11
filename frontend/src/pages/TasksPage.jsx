@@ -1,3 +1,11 @@
+/*
+File Purpose:
+Task management page composition with filters, form, list, and empty states.
+
+Connected With:
+- frontend/src/components/tasks/*
+- frontend/src/hook/useAuth.js indirectly through dashboard nav only
+*/
 import { useEffect, useState } from "react";
 import TaskFilters from "../components/tasks/TaskFilters";
 import TaskForm from "../components/tasks/TaskForm";

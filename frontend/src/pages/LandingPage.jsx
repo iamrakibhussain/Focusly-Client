@@ -1,3 +1,10 @@
+/*
+File Purpose:
+Public landing page composition using the marketing sections.
+
+Connected With:
+- frontend/src/components/landingpagecomponent/*
+*/
 import HeroSection from "../components/landingpagecomponent/HeroSection";
 import TrustBar from "../components/landingpagecomponent/TrustBar";
 import FeatureSection from "../components/landingpagecomponent/FeatureSection";

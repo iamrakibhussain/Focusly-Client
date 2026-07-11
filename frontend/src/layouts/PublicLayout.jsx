@@ -1,3 +1,10 @@
+/*
+File Purpose:
+Public-facing shell for landing and auth pages.
+
+Connected With:
+- frontend/src/routes/AppRoutes.jsx
+*/
 import { Outlet } from "react-router-dom";
 import HeaderComponent from "../components/landingpagecomponent/Headercontent";
 

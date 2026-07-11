@@ -1,3 +1,10 @@
+/*
+File Purpose:
+Public password recovery page.
+
+Connected With:
+- future auth recovery flow
+*/
 import { Link } from "react-router-dom";
 
 export default function ForgotPasswordPage() {

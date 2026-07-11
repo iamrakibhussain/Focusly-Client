@@ -7,8 +7,8 @@ import taskRouter from './routes/task.routes.js'
 
 const app = express();
 app.use(cors({
-  // origin:process.env.FRONTEND_URL || "http://localhost:5173", //Local URL
-  origin:process.env.FRONTEND_URL,//Production URL
+  origin:process.env.FRONTEND_URL || "http://localhost:5173", //Local URL
+  // origin:process.env.FRONTEND_URL,//Production URL
   credentials: true,
 }))
 app.use(cookieParser());

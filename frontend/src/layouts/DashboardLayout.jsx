@@ -1,3 +1,11 @@
+/*
+File Purpose:
+Authenticated app shell with sidebar navigation and dashboard header.
+
+Connected With:
+- frontend/src/components/ProtectedRoute.jsx
+- frontend/src/routes/AppRoutes.jsx
+*/
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import {
