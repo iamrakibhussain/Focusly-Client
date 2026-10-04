@@ -4,7 +4,7 @@ export async function createTask(req, res) {
 
     try {
         const userId = req.user.userId
-        const { title, description, priority, dueDate, status } = req.body
+        const { title, description, priority, deadline, status } = req.body
         if (!title) {
             return res.status(400).json({
                 success: false,
@@ -15,7 +15,7 @@ export async function createTask(req, res) {
             title,
             description,
             priority,
-            dueDate,
+            deadline,
             status,
             userId,
         })
@@ -54,13 +54,13 @@ export async function updateTask(req, res) {
     try {
         const userId = req.user.userId
         const { id } = req.params
-        const { title, description, priority, dueDate, status } = req.body
+        const { title, description, priority, deadline, status } = req.body
 
         const updatedTask = await updateTaskService(id, userId, {
             title,
             description,
             priority,
-            dueDate,
+            deadline,
             status,
         })
 

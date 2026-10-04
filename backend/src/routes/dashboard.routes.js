@@ -8,10 +8,12 @@ Connected With:
 */
 import express from "express";
 import { tokenVerifyLogic } from "../middlewares/auth.middleware.js";
-import { getDashboardStats } from "../controllers/dashboard.controller.js";
+import { getDashboardStats, getDashboardSummary, saveFocusSession } from "../controllers/dashboard.controller.js";
 
 const dashboardRouter = express.Router();
 
 dashboardRouter.get("/stats", tokenVerifyLogic, getDashboardStats);
+dashboardRouter.get("/summary", tokenVerifyLogic, getDashboardSummary);
+dashboardRouter.post("/focus-session", tokenVerifyLogic, saveFocusSession);
 
 export default dashboardRouter;

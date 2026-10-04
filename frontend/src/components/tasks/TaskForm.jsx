@@ -6,7 +6,7 @@ const initialFormData = {
   description: "",
   priority: "MEDIUM",
   status: "PENDING",
-  dueDate: "",
+  deadline: "",
 };
 
 const priorityOptions = [
@@ -45,7 +45,7 @@ function buildFormData(task) {
     description: task.description || "",
     priority: task.priority || "MEDIUM",
     status: task.status || "PENDING",
-    dueDate: formatDateForInput(task.dueDate),
+    deadline: formatDateForInput(task.deadline),
   };
 }
 
@@ -125,8 +125,8 @@ export default function TaskForm({
         description: formData.description.trim(),
         priority: formData.priority,
         status: formData.status,
-        ...(formData.dueDate
-          ? { dueDate: new Date(formData.dueDate).toISOString() }
+        ...(formData.deadline
+          ? { deadline: new Date(formData.deadline).toISOString() }
           : {}),
       };
       const url = isEditMode
@@ -321,14 +321,14 @@ export default function TaskForm({
           </div>
 
           <div className="grid gap-2">
-            <label htmlFor="dueDate" className="text-sm font-medium text-foreground">
-              Due Date
+            <label htmlFor="deadline" className="text-sm font-medium text-foreground">
+              Deadline
             </label>
             <input
-              id="dueDate"
-              name="dueDate"
+              id="deadline"
+              name="deadline"
               type="date"
-              value={formData.dueDate}
+              value={formData.deadline}
               onChange={handleChange}
               disabled={isSubmitting}
               className="rounded-control border border-white/10 bg-background px-4 py-3 text-foreground outline-none transition focus:border-primary"

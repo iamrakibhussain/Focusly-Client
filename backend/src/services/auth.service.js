@@ -2,6 +2,13 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import prisma from "../lib/prisma.js";
 
+// Utility to generate tokens
+const generateTokens = (userId) => {
+  const accessToken = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: "15m" });
+  const refreshToken = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: "7d" });
+  return { accessToken, refreshToken };
+};
+
 export async function registerUserService({ name, email, password }) {
   const normalizedName = name.trim();
   const normalizedEmail = email.trim().toLowerCase();
@@ -55,18 +62,58 @@ export async function loginUserService({ email, password }) {
     throw error;
   }
 
-  const token = jwt.sign(
-    { userId: user.id },
-    process.env.JWT_SECRET,
-    { expiresIn: "7d" }
-  );
+  const { accessToken, refreshToken } = generateTokens(user.id);
+
+  // Save refresh token in DB
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { refreshToken },
+  });
 
   return {
     id: user.id,
     name: user.name,
     email: user.email,
-    token,
+    token: accessToken,
+    refreshToken,
   };
+}
+
+export async function refreshAccessTokenService(refreshToken) {
+  if (!refreshToken) {
+    const error = new Error("No refresh token provided");
+    error.statusCode = 401;
+    throw error;
+  }
+
+  let decoded;
+  try {
+    decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
+  } catch (err) {
+    const error = new Error("Invalid or expired refresh token");
+    error.statusCode = 403;
+    throw error;
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: decoded.userId },
+  });
+
+  if (!user || user.refreshToken !== refreshToken) {
+    const error = new Error("Invalid refresh token");
+    error.statusCode = 403;
+    throw error;
+  }
+
+  const tokens = generateTokens(user.id);
+
+  // Save new refresh token in DB
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { refreshToken: tokens.refreshToken },
+  });
+
+  return tokens;
 }
 
 export async function getUserByIdService(userId) {

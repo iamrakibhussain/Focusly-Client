@@ -113,16 +113,16 @@ export default function TaskFilters({ filters, onFilterChange, onReset }) {
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="dueDate" className={labelClassName}>
-              Due date
+            <label htmlFor="deadline" className={labelClassName}>
+              Deadline
             </label>
             <div className="relative">
               <CalendarDays className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-secondary" />
               <input
                 type="date"
-                id="dueDate"
-                name="dueDate"
-                value={filters.dueDate}
+                id="deadline"
+                name="deadline"
+                value={filters.deadline}
                 onChange={handleFilterChange}
                 className={`${controlClassName} pl-10`}
               />
