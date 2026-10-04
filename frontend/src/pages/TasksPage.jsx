@@ -24,7 +24,7 @@ export default function TasksPage() {
     search: "",
     priority: "ALL",
     status: "ALL",
-    dueDate: "",
+    deadline: "",
   });
 
   const formatDateForFilter = (dateValue) => {
@@ -44,13 +44,13 @@ export default function TasksPage() {
       (task.description || "").toLowerCase().includes(filters.search.toLowerCase());
     const priorityMatch = filters.priority === "ALL" || task.priority === filters.priority;
     const statusMatch = filters.status === "ALL" || task.status === filters.status;
-    const dueDateMatch = filters.dueDate === "" || formatDateForFilter(task.dueDate) === filters.dueDate;
+    const deadlineMatch = filters.deadline === "" || formatDateForFilter(task.deadline) === filters.deadline;
 
     return (
       priorityMatch &&
       statusMatch &&
       searchMatch &&
-      dueDateMatch
+      deadlineMatch
     );
   });
 
@@ -66,7 +66,7 @@ export default function TasksPage() {
       search: "",
       priority: "ALL",
       status: "ALL",
-      dueDate: "",
+      deadline: "",
     });
   };
 

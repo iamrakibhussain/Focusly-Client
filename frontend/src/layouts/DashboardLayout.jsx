@@ -8,6 +8,8 @@ Connected With:
 */
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import useAuth from "../hook/useAuth.js";
+
 import {
   BarChart3,
   CalendarDays,
@@ -32,6 +34,7 @@ const navItems = [
 ];
 
 export default function DashboardLayout() {
+  const { user } = useAuth();
   const [isSidebarOpen, setisSidebarOpen] = useState(false);
   const closeSidebar = () => setisSidebarOpen(false);
   const navigate = useNavigate();
@@ -74,8 +77,7 @@ export default function DashboardLayout() {
               F
             </span>
             <div>
-              <p className="font-semibold leading-tight">Focusly</p>
-              <p className="text-sm text-text-secondary">Study Planner</p>
+              <p className="font-semibold leading-tight">{user?.name ? `${user.name}'s` : "Your"} Study Planner</p>
             </div>
           </div>
 

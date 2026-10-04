@@ -69,7 +69,7 @@ export default function TaskCard({ task, onEdit, onDelete, onToggleStatus }) {
           Status: {task.status}
         </span>
         <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1">
-          Due: {formatDate(task.dueDate)}
+          Due: {formatDate(task.deadline)}
         </span>
         <button
           type="button"
