@@ -35,9 +35,9 @@ function formatDateForInput(dateValue) {
   return parsedDate.toISOString().slice(0, 10);
 }
 
-function buildFormData(task) {
+function buildFormData(task, initialData = {}) {
   if (!task) {
-    return initialFormData;
+    return { ...initialFormData, ...initialData };
   }
 
   return {
@@ -53,8 +53,10 @@ export default function TaskForm({
   onTaskCreated,
   editingTask,
   onCancelEdit,
+  initialData = {},
+  onSuccess,
 }) {
-  const [formData, setFormData] = useState(() => buildFormData(editingTask));
+  const [formData, setFormData] = useState(() => buildFormData(editingTask, initialData));
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isEditMode = Boolean(editingTask);
@@ -186,9 +188,9 @@ export default function TaskForm({
   return (
     <section
       id="task-form-section"
-      className="overflow-hidden rounded-panel border border-white/10 bg-slate-900/70 shadow-soft"
+      className="relative overflow-y-auto max-h-[90vh] rounded-2xl border border-white/10 bg-slate-900/60 backdrop-blur-xl shadow-2xl transition-all scrollbar-hide"
     >
-      <div className="h-1 w-full bg-gradient-to-r from-primary via-accent to-cyan-300" />
+      <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500" />
       <div className="p-4 sm:p-5">
         <div className="mb-5 flex flex-col gap-2">
           <p className="text-sm font-medium uppercase tracking-[0.18em] text-accent">
