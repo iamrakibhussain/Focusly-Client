@@ -11,12 +11,23 @@ export async function createTask(req, res) {
                 message: "Title is required"
             })
         }
+
+        const validPriorities = ["LOW", "MEDIUM", "HIGH", "URGENT"];
+        const validStatuses = ["PENDING", "IN_PROGRESS", "COMPLETED", "OVERDUE"];
+
+        if (priority && !validPriorities.includes(priority)) {
+            return res.status(400).json({ success: false, message: "Invalid priority value" });
+        }
+        if (status && !validStatuses.includes(status)) {
+            return res.status(400).json({ success: false, message: "Invalid status value" });
+        }
+
         const task = await createTaskService({
             title,
             description,
-            priority,
+            priority: priority || "MEDIUM",
             deadline,
-            status,
+            status: status || "PENDING",
             userId,
         })
         return res.status(201).json({
@@ -55,6 +66,16 @@ export async function updateTask(req, res) {
         const userId = req.user.userId
         const { id } = req.params
         const { title, description, priority, deadline, status } = req.body
+
+        const validPriorities = ["LOW", "MEDIUM", "HIGH", "URGENT"];
+        const validStatuses = ["PENDING", "IN_PROGRESS", "COMPLETED", "OVERDUE"];
+
+        if (priority && !validPriorities.includes(priority)) {
+            return res.status(400).json({ success: false, message: "Invalid priority value" });
+        }
+        if (status && !validStatuses.includes(status)) {
+            return res.status(400).json({ success: false, message: "Invalid status value" });
+        }
 
         const updatedTask = await updateTaskService(id, userId, {
             title,

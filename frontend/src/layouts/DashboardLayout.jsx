@@ -56,8 +56,8 @@ export default function DashboardLayout() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-background text-foreground">
-      <div className="mx-auto min-h-screen w-full max-w-7xl lg:grid lg:grid-cols-[260px_1fr]">
+    <div className="relative h-screen w-screen overflow-hidden bg-background text-foreground">
+      <div className="mx-auto h-full w-full max-w-7xl lg:grid lg:grid-cols-[260px_1fr]">
         <button
           type="button"
           aria-label="Close sidebar"
@@ -69,7 +69,7 @@ export default function DashboardLayout() {
         />
 
         <aside
-          className={`fixed inset-y-0 left-0 z-40 h-full w-[min(20rem,85vw)] overflow-y-auto border-r border-white/10 bg-surface/95 px-4 py-5 shadow-2xl backdrop-blur-xl transition-transform duration-300 ease-out lg:static lg:top-auto lg:z-auto lg:w-auto lg:translate-x-0 lg:bg-surface/70 lg:shadow-none ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          className={`fixed inset-y-0 left-0 z-40 h-full w-[min(20rem,85vw)] overflow-y-auto border-r border-white/10 bg-surface/95 px-4 py-5 shadow-2xl backdrop-blur-xl transition-transform duration-300 ease-out lg:static lg:z-auto lg:w-auto lg:translate-x-0 lg:bg-surface/70 lg:shadow-none ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
             }`}
         >
           <div className="mb-8 flex items-center justify-between gap-3 lg:justify-start">
@@ -115,8 +115,8 @@ export default function DashboardLayout() {
           </div>
         </aside>
 
-        <div className="flex min-w-0 min-h-screen flex-col lg:min-h-screen">
-          <header className="sticky top-0 z-20 border-b border-white/10 bg-surface/50 px-4 py-4 backdrop-blur-sm sm:px-6 lg:px-8">
+        <div className="flex min-w-0 min-h-0 h-full flex-col">
+          <header className="flex-none z-20 border-b border-white/10 bg-surface/50 px-4 py-4 backdrop-blur-sm sm:px-6 lg:px-8">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
               <div className="flex items-center gap-3">
                 <button
@@ -149,7 +149,7 @@ export default function DashboardLayout() {
             </div>
           </header>
 
-          <main className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-8">
+          <main className="min-w-0 min-h-0 flex-1 overflow-y-auto px-4 py-6 sm:px-6 lg:px-8 scrollbar-hide">
             <Outlet />
           </main>
         </div>

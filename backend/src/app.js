@@ -9,6 +9,10 @@ import rateLimit from "express-rate-limit";
 import authRouter from './routes/auth.routes.js'
 import taskRouter from './routes/task.routes.js'
 import dashboardRouter from './routes/dashboard.routes.js'
+import plannerRouter from './routes/planner.routes.js'
+import goalsRouter from './routes/goals.routes.js'
+import analyticsRouter from './routes/analytics.routes.js'
+import settingsRouter from './routes/settings.routes.js'
 
 import { xssSanitizer } from "./middlewares/xss.middleware.js";
 import { globalErrorHandler } from "./middlewares/error.middleware.js";
@@ -40,6 +44,10 @@ app.use(xssSanitizer);
 app.use("/api/auth", authRouter)
 app.use("/api/tasks", taskRouter)
 app.use("/api/dashboard", dashboardRouter)
+app.use("/api/planner", plannerRouter)
+app.use("/api/goals", goalsRouter)
+app.use("/api/analytics", analyticsRouter)
+app.use("/api/settings", settingsRouter)
 
 app.get("/", (req, res) => {
   res.send("Hello from Focusly Server!");

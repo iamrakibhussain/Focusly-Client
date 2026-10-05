@@ -1,33 +1,20 @@
-/*
-File Purpose:
-Placeholder for subject-wise progress section.
-
-Connected With:
-- frontend/src/pages/AnalyticsPage.jsx
-*/
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
-const COLORS = ['#3b82f6', '#f97316', '#ef4444', '#10b981'];
-
-export default function SubjectProgress({ data = [] }) {
-  const chartData = data.map((d, index) => ({
-    ...d,
-    color: COLORS[index % COLORS.length]
-  }));
-
+export default function TasksByCategoryChart({ data = [] }) {
+  // We'll use the color provided by the backend for each category
   return (
     <section className="rounded-3xl border border-white/10 bg-slate-900/40 p-6 backdrop-blur-xl shadow-xl flex flex-col">
       <div className="mb-6">
-        <p className="text-sm font-medium uppercase tracking-widest text-orange-400">Tasks Breakdown</p>
-        <h3 className="text-xl font-bold text-white mt-1">Tasks by Priority</h3>
+        <p className="text-sm font-medium uppercase tracking-widest text-emerald-400">Categories Breakdown</p>
+        <h3 className="text-xl font-bold text-white mt-1">Tasks by Category</h3>
       </div>
       
       <div className="h-64 w-full">
-        {chartData.length > 0 ? (
+        {data.length > 0 ? (
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
-                data={chartData}
+                data={data}
                 cx="50%"
                 cy="50%"
                 innerRadius={60}
@@ -37,7 +24,7 @@ export default function SubjectProgress({ data = [] }) {
                 stroke="rgba(255,255,255,0.05)"
                 strokeWidth={2}
               >
-                {chartData.map((entry, index) => (
+                {data.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
@@ -50,7 +37,7 @@ export default function SubjectProgress({ data = [] }) {
           </ResponsiveContainer>
         ) : (
           <div className="flex h-full items-center justify-center text-slate-500">
-            No tasks completed yet
+            No categories found
           </div>
         )}
       </div>
